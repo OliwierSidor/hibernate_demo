@@ -41,12 +41,29 @@ public class StudentDao implements IStudentDao {
 
     @Override
     public void removeStudent(Student student) {
+        SessionFactory factory = HibernateUtil.INSTANCE.getSessionFactory();
 
+        Transaction transaction = null;
+        try (Session session = factory.openSession()) {
+
+            transaction = session.beginTransaction();
+            session.remove(student);
+
+            transaction.commit();
+        } catch (SessionException se) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        }
     }
 
     @Override
     public Optional<Student> returnStudent(Long id) {
-        return Optional.empty();
+        SessionFactory factory = HibernateUtil.INSTANCE.getSessionFactory();
+        try (Session session = factory.openSession()) {
+            Student objectStudent = session.get(Student.class, id);
+            return Optional.ofNullable(objectStudent);
+        }
     }
 
     @Override
@@ -56,7 +73,7 @@ public class StudentDao implements IStudentDao {
 
         SessionFactory factory = HibernateUtil.INSTANCE.getSessionFactory();
         try (Session session = factory.openSession()) {
-            TypedQuery <Student> question = session.createQuery("from Student", Student.class);
+            TypedQuery<Student> question = session.createQuery("from Student", Student.class);
             List<Student> resultOfQuestion = question.getResultList();
 
             studentList.addAll(resultOfQuestion);
@@ -68,6 +85,19 @@ public class StudentDao implements IStudentDao {
 
     @Override
     public void updateStudent(Student student) {
+        SessionFactory factory = HibernateUtil.INSTANCE.getSessionFactory();
 
+        Transaction transaction = null;
+        try (Session session = factory.openSession()) {
+
+            transaction = session.beginTransaction();
+            session.merge(student);
+
+            transaction.commit();
+        } catch (SessionException se) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        }
     }
 }

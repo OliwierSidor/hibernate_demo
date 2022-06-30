@@ -6,12 +6,22 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-//Wzorzec projektowy Singleton
+//Wzorzec(Antywzorzec) projektowy Singleton
 //
 // Rozwiazuje problem:
 //  - jak stworzyc obiekt aby istnial tylko jeden na caly projekt
 //  - jak sprawic by ten obiekt ladowal sie TYLKO RAZ
 //  - jak sprawic by był ogolnodostepny
+
+
+// "To zalezy"
+// Wady:
+//  - jesli naduyzywamy singletownow to lamia zasade obiektowosci (oop)
+//  - jesli naduzywamy to zbyt wiele obiektow zyskuje nadmiena moc statyczna (godlike object) (łamie SOLID)
+//  - nie wszystko powinno byc ogolnodostepne (public static) (lamie paradygmaty programowania obiektowgo)
+
+// Zalety:
+// - jest sensownym rozwiazaniem na rozwiazanie trudnego problemu
 
 public class HibernateUtil {
     public static final HibernateUtil INSTANCE = new HibernateUtil();
